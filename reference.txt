@@ -1,0 +1,11 @@
+16 tbal
+24 semi tbal
+20 op
+36 tbal
+48 tbal
+
+
+400
+600
+700
+
