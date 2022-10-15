@@ -83,11 +83,14 @@ class LoginScreen extends StatelessWidget {
                       textAtas: "Username",
                       keterangan: "Username",
                       textController: _usernameController,
+                      icon: Icons.person,
                     ),
-                    CustomForm(
+                    CustomPassForm(
                       textAtas: "Password",
                       keterangan: "Password",
                       textController: _passwordController,
+                      icon: Icons.key,
+          
                     ),
                     Container(
                       alignment: AlignmentDirectional.center,
@@ -100,7 +103,7 @@ class LoginScreen extends StatelessWidget {
                             // result.error == true
                             //     ? print("Sukses")
                             //     : print("gagal");
-
+        
                             Navigator.pushNamed(
                               context,
                               HomeScreen.routeName,

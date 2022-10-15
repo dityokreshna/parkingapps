@@ -19,11 +19,21 @@ class MyHttp {
     return result;
   }
 
-  Future<ModelBaseResponse> register(String username, String password,
-      String fullName, String phoneNumber, String address, String dob) async {
+  Future<ModelBaseResponse> register(
+      String username,
+      String password,
+      String fullName,
+      String phoneNumber,
+      String email,
+      String address,
+      String dob,
+      ) async {
+
     var response = await http.post(urlreg, body: {
       'username': username,
+      'fullName': fullName,
       'password': password,
+      'email': email,
       'phoneNumber': phoneNumber,
       'address': address,
       'dob': dob

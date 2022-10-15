@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:parkingapps/style/style_text.dart';
 import 'package:parkingapps/view/view_detail/detail_screen.dart';
 import 'package:parkingapps/view/view_home/home_search.dart';
 import 'package:parkingapps/view/view_vehicle/vehicle_add.dart';
@@ -47,8 +48,8 @@ class MyApp extends StatelessWidget {
           LoginScreen.routeName: (context) => LoginScreen(),
           SignupScreen.routeName: (context) => SignupScreen(),
           SignupExtendScreen.routeName: (context) => SignupExtendScreen(
-                dataPassing: ModalRoute.of(context)?.settings.arguments as SignupDetailArguments,
-               
+                dataPassing: ModalRoute.of(context)?.settings.arguments
+                    as SignupDetailArguments,
               ),
           HomeScreen.routeName: (context) => HomeScreen(),
           VehicleAdd.routeName: (context) => VehicleAdd(),
