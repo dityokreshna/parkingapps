@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+final Color primaryColor = Color(0xFFFFFFFF);
+final Color secondaryColor = Color.fromARGB(255, 35, 83, 143);
+
 TextTheme myTextTheme(
         {fontWeights = FontWeight.normal, colors = Colors.black}) =>
     TextTheme(

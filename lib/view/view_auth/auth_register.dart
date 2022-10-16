@@ -7,8 +7,10 @@ import 'package:parkingapps/models/model_auth_response.dart';
 import 'package:parkingapps/models/model_base_response.dart';
 import 'package:parkingapps/style/style_text.dart';
 import 'package:parkingapps/view/view_home/home_screen.dart';
+import 'package:parkingapps/viewmodels/hive_notifier.dart';
 import 'package:parkingapps/viewmodels/viewmodels_http.dart';
 import 'package:parkingapps/viewmodels/viewmodels_validation.dart';
+import 'package:provider/provider.dart';
 
 import 'auth_extend/extend_widget.dart';
 import 'auth_login.dart';
@@ -102,12 +104,18 @@ class SignupScreen extends StatelessWidget {
                         textController: _addressController,
                         icon: Icons.home_rounded,
                       ),
-                      CustomForm(
+                      DateofBirthForm(
                         textAtas: "Date of Birth",
                         keterangan: "Date of Birth",
                         textController: _dateOfBirthController,
                         icon: Icons.date_range,
                       ),
+                      // CustomForm(
+                      //   textAtas: "Date of Birth",
+                      //   keterangan: "Date of Birth",
+                      //   textController: _dateOfBirthController,
+                      //   icon: Icons.date_range,
+                      // ),
                       Container(
                         alignment: AlignmentDirectional.center,
                         child: Padding(
@@ -312,36 +320,7 @@ class SignupExtendScreen extends StatelessWidget {
                       child: InkWell(
                         onTap: () async {
                           // print(dataPassing.fullName);
-                          final snackBar = SnackBar(
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: Color.fromARGB(255, 35, 83, 143),
-                                  width: 2),
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                            margin: EdgeInsets.fromLTRB(20, 10, 20, 30),
-                            // margin: EdgeInsets.only(bottom: 10),
-                            elevation: 5,
-                            backgroundColor: Colors.white,
-                            content: Row(
-                              children: [
-                                Expanded(
-                                    child: Text('Gagal Daftar Cok',
-                                        style: myTextTheme(
-                                                colors: Colors.black,
-                                                fontWeights: FontWeight.bold)
-                                            .subtitle1)),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Text('OK',
-                                      style: myTextTheme(colors: Colors.black)
-                                          .button),
-                                ),
-                              ],
-                            ),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
                           try {
                             MyValidation().registerValidation(
                                 _usernameController.text,
@@ -350,8 +329,59 @@ class SignupExtendScreen extends StatelessWidget {
                                 dataPassing.phoneNumber,
                                 dataPassing.email,
                                 dataPassing.address,
+                                dataPassing.dateOfBirth,
+                                _repeatPasswordController.text);
+                            ModelBaseResponse result = await MyHttp().register(
+                                _usernameController.text,
+                                _passwordController.text,
+                                dataPassing.fullName,
+                                dataPassing.phoneNumber,
+                                dataPassing.email,
+                                dataPassing.address,
                                 dataPassing.dateOfBirth);
+                            result.error == true
+                                ? print("Sukses")
+                                : throw new ValueException(
+                                    "Failed to Register");
+                            Navigator.pushNamed(
+                              context,
+                              LoginScreen.routeName,
+                            );
                           } catch (e) {
+                            final snackBar = SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: Color.fromARGB(255, 35, 83, 143),
+                                    width: 2),
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              margin: EdgeInsets.fromLTRB(20, 10, 20, 30),
+                              // margin: EdgeInsets.only(bottom: 10),
+                              elevation: 5,
+                              backgroundColor: Colors.white,
+                              content: Row(
+                                children: [
+                                  Expanded(
+                                      child: Text(e.toString(),
+                                          style: myTextTheme(
+                                                  colors: Colors.black,
+                                                  fontWeights: FontWeight.bold)
+                                              .subtitle1)),
+                                  TextButton(
+                                    onPressed: () {
+                                      ScaffoldMessenger.of(context)
+                                          .removeCurrentSnackBar();
+                                    },
+                                    child: Text('OK',
+                                        style: myTextTheme(colors: Colors.black)
+                                            .button),
+                                  ),
+                                ],
+                              ),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                             print(e.toString());
                           }
                           // print(dataPassing.dateOfBirth);

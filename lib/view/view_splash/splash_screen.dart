@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:intl/intl.dart';
 import 'package:parkingapps/style/style_text.dart';
 import 'package:parkingapps/view/view_auth/auth_login.dart';
 
@@ -79,7 +80,8 @@ class SplashScreen extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, LoginScreen.routeName);
+                    print(DateFormat.yMd().parse('06/09/2019'));
+                    // Navigator.pushNamed(context, LoginScreen.routeName);
                   },
                   child: Container(
                     margin: EdgeInsets.only(bottom: 22),

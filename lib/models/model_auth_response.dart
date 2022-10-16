@@ -1,3 +1,6 @@
+import 'package:hive/hive.dart';
+part 'model_auth_response.g.dart';
+
 class ModelAuthResponse {
   Result? result;
   String? status;
@@ -26,13 +29,22 @@ class ModelAuthResponse {
   }
 }
 
-class Result {
+@HiveType(typeId: 0)
+class Result extends HiveObject {
+  @HiveField(0)
   String? fullName;
+  @HiveField(1)
   String? phoneNumber;
+  @HiveField(2)
   String? email;
+  @HiveField(3)
   String? address;
+  @HiveField(4)
   String? dob;
+  @HiveField(5)
   String? levelUser;
+  @HiveField(6)
+  String? token;
 
   Result(
       {this.fullName,
@@ -40,7 +52,8 @@ class Result {
       this.email,
       this.address,
       this.dob,
-      this.levelUser});
+      this.levelUser,
+      this.token});
 
   Result.fromJson(Map<String, dynamic> json) {
     fullName = json['fullName'];
@@ -49,6 +62,7 @@ class Result {
     address = json['address'];
     dob = json['dob'];
     levelUser = json['levelUser'];
+    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -59,6 +73,34 @@ class Result {
     data['address'] = this.address;
     data['dob'] = this.dob;
     data['levelUser'] = this.levelUser;
+    data['token'] = this.token;
     return data;
   }
 }
+
+// @HiveType(typeId: 0)
+// class ResultHive extends HiveObject {
+//   @HiveField(0)
+//   String? fullName;
+//   @HiveField(1)
+//   String? phoneNumber;
+//   @HiveField(2)
+//   String? email;
+//   @HiveField(3)
+//   String? address;
+//   @HiveField(4)
+//   String? dob;
+//   @HiveField(5)
+//   String? levelUser;
+//   @HiveField(6)
+//   String? token;
+
+//   ResultHive(
+//       {this.fullName,
+//       this.phoneNumber,
+//       this.email,
+//       this.address,
+//       this.dob,
+//       this.levelUser,
+//       this.token});
+// }

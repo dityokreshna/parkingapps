@@ -5,7 +5,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:parkingapps/models/model_auth_response.dart';
 import 'package:parkingapps/style/style_text.dart';
 import 'package:parkingapps/view/view_home/home_screen.dart';
+import 'package:parkingapps/viewmodels/hive_notifier.dart';
 import 'package:parkingapps/viewmodels/viewmodels_http.dart';
+import 'package:parkingapps/viewmodels/viewmodels_validation.dart';
+import 'package:provider/provider.dart';
 
 import 'auth_extend/extend_widget.dart';
 import 'auth_register.dart';
@@ -90,7 +93,6 @@ class LoginScreen extends StatelessWidget {
                       keterangan: "Password",
                       textController: _passwordController,
                       icon: Icons.key,
-          
                     ),
                     Container(
                       alignment: AlignmentDirectional.center,
@@ -98,16 +100,69 @@ class LoginScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 8.0, top: 12.0),
                         child: InkWell(
                           onTap: () async {
-                            // ModelAuthResponse result =
-                            //     await MyHttp().auth(_usernameController.text, _passwordController.text);
-                            // result.error == true
-                            //     ? print("Sukses")
-                            //     : print("gagal");
-        
-                            Navigator.pushNamed(
-                              context,
-                              HomeScreen.routeName,
-                            );
+                            try {
+                              MyValidation().loginValidation(
+                                _usernameController.text,
+                                _passwordController.text,
+                              );
+                              ModelAuthResponse result = await MyHttp().auth(
+                                  _usernameController.text,
+                                  _passwordController.text);
+                              result.error == true
+                                  ? print("Sukses")
+                                  : throw new ValueException("Failed to Login");
+                              bool _saveData = await Provider.of<HiveNotifier>(
+                                      context,
+                                      listen: false)
+                                  .addItem(
+                                result.result!.fullName,
+                                result.result!.phoneNumber,
+                                result.result!.email,
+                                result.result!.address,
+                                result.result!.dob,
+                                result.result!.levelUser,
+                                result.result!.token,
+                              );
+                              _saveData == true
+                                  ? Navigator.pushNamed(
+                                      context, HomeScreen.routeName)
+                                  :  throw new ValueException("Failed to Save Data");;
+                            } catch (e) {
+                              final snackBar = SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: Color.fromARGB(255, 35, 83, 143),
+                                      width: 2),
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                                margin: EdgeInsets.fromLTRB(20, 10, 20, 30),
+                                // margin: EdgeInsets.only(bottom: 10),
+                                elevation: 5,
+                                backgroundColor: Colors.white,
+                                content: Row(
+                                  children: [
+                                    Expanded(
+                                        child: Text(e.toString(),
+                                            style: myTextTheme(
+                                                    colors: Colors.black,
+                                                    fontWeights:
+                                                        FontWeight.bold)
+                                                .subtitle1)),
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: Text('OK',
+                                          style:
+                                              myTextTheme(colors: Colors.black)
+                                                  .button),
+                                    ),
+                                  ],
+                                ),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                              print(e.toString());
+                            }
                           },
                           child: Container(
                               alignment: Alignment.center,
